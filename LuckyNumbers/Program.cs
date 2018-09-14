@@ -10,6 +10,19 @@ namespace LuckyNumbers
     {
         static void Main(string[] args)
         {
+
+            Console.WriteLine("GitHub is a pain");
+
+
+
+
+
+
+
+
         }
+
+
+
     }
 }
