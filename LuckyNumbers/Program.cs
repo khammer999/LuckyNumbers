@@ -18,8 +18,8 @@ namespace LuckyNumbers
 
                 //Global variable declare here
 
-                double jackpot = 3600;
-
+                double jackpot = 3600.00; // hardcoded jackpot amount per spec 
+                double winnings = 0;
                 int[] randomNumberArray = new int[6];
                 int[] selectedNumberArray = new int[6];
 
@@ -27,95 +27,147 @@ namespace LuckyNumbers
                 int lowRange = 0;
                 int firstNumber = 0;
                 int secondNumber = 0;
-                int thirdNumber = 0;
-                int fourthNumber = 0;
-                int fifthNumber = 0;
-                int sixthNumber = 0;
-                int numberCount = 0;
                 int numberEntered = 0;
                 int numberOfMatches = 0;
 
 
                 String checkForExit = null;
 
-               
+                // Present Jackpot amount to user
+
+                for (int i = 3; i > 0; i--)
+                {
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine("Today's Jackpot is $" + jackpot);
+
+                for (int i = 3; i > 0; i--)
+                {
+                    Console.WriteLine();
+                }
+
 
                 //INPUTS -get inputs here
 
                 //get low range and high range numbers
 
                 Console.WriteLine("Please enter a starting number");
-                lowRange= int.Parse(Console.ReadLine());
+                lowRange = int.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter an ending number");
                 highRange = int.Parse(Console.ReadLine());
 
-
-                //INPUT
                 //get six guessed numbers and set to array
 
-                numberCount = selectedNumberArray.Length;
+                
 
                 for (int i = 0; i < selectedNumberArray.Length; i++)
                 {
-                    
+
                     Console.WriteLine("Please enter one of your six number guesses");
                     numberEntered = int.Parse(Console.ReadLine());
 
-                    while ((numberEntered < lowRange)|| (numberEntered > highRange)){
+                    //trap for invalid
+
+                    while ((numberEntered < lowRange) || (numberEntered > highRange))
+                    {
 
                         Console.WriteLine("Please enter a valid number");
                         numberEntered = int.Parse(Console.ReadLine());
                     }
-                                                                       
+
                     selectedNumberArray[i] = numberEntered;
-                    numberCount--;
-                    Console.WriteLine("you have " + numberCount + " entries left");
-                    
+                      
                 }
 
-                //TEST Code --- display contents of an array
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine("array contains");
-                Console.WriteLine();
-                for (int i = 0; i < selectedNumberArray.Length; i++)
-                {
-                   Console.Write(selectedNumberArray[i] + ", ");
-                 }
-                Console.WriteLine();
-
-                //end test code
-
+                
                 //LOGIC Section ---APPLICATION LOGIC
 
-                // generate 6 random numbers and set to randomNumbersArray
+                // generate 6 random numbers and set to randomNumbersArray, trap for duplicates
 
                 Random rand = new Random();
+                int[] compareArray = new int[6];
 
-                for (int i=0; i < randomNumberArray.Length; i++)
-                {
-                    randomNumberArray[i] = rand.Next(lowRange, highRange + 1);
-                }
-
-                //TEST Code --- display contents of an array
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine("random array contains");
-                Console.WriteLine();
                 for (int i = 0; i < randomNumberArray.Length; i++)
                 {
-                    Console.Write(randomNumberArray[i] + ", ");
+                    randomNumberArray[i] = rand.Next(lowRange, highRange + 1);
+                    compareArray[i] = randomNumberArray[i];     
                 }
-                Console.WriteLine();
+                
+                for (int i = 0; i < randomNumberArray.Length; i++)
+                {
+                    
+                      while(randomNumberArray[i] == compareArray[i])
+                        {
+                            randomNumberArray[i] = rand.Next(lowRange, highRange + 1);
+                        }
 
-                //end test code
+                 }
+                
 
 
 
+               // display random numbers to the console
+                for (int i = 0; i < randomNumberArray.Length; i++)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Lucky Number: "+randomNumberArray[i]);
+                    Console.WriteLine();
+                }
+
+                
+
+                //Check for winning numbers (matches)
+                for (int i = 0; i < selectedNumberArray.Length; i++)
+                {
+                    firstNumber = selectedNumberArray[i];
+
+                    for (int j=0;j<randomNumberArray.Length;j++)
+                    {
+                        secondNumber = randomNumberArray[j];
+                        if (firstNumber == secondNumber)
+                        {
+                            numberOfMatches++;
+                        }
+                    }
+                }
+
+                
+                //OUTPUT
+                
+                
+                
+                //calculate prize amount
+
+                switch(numberOfMatches)
+                   { case 1:
+                        winnings = (jackpot/6)*.01;
+                        break;
+                    case 2:
+                        winnings = jackpot/3*.01;
+                        break;
+
+                    case 3:
+                        winnings = jackpot/1.5*.01;
+                        break;
+                    case 4:
+                        winnings = jackpot /0.75 * .01;
+                        break;
+                    case 5:
+                        winnings = jackpot /0.0375 * .01;
+                        break;
+                    case 6:
+                        winnings = jackpot/1;
+                        break;
+                    default: winnings = 0/jackpot;
+                        break;
+
+                }
 
 
+                
 
-
+                Console.Write("You guessed {0} numbers correctly!  You won ${1}!", numberOfMatches,winnings);
 
 
                 //EXIT PROGRAM OPTION
@@ -136,19 +188,14 @@ namespace LuckyNumbers
 
                 } else {Console.WriteLine("");// resets all values to first run state
                         Console.WriteLine("");
-                       // Array.Clear(selectedNumberArray, 0, selectedNumberArray.Length);
+                        //Array.Clear(selectedNumberArray, 0, selectedNumberArray.Length);
+                        Array.Clear(randomNumberArray, 0, randomNumberArray.Length);
                         highRange = 0;
                         lowRange = 0;
                         firstNumber = 0;
-                        secondNumber = 0;
-                        thirdNumber = 0;
-                        fourthNumber = 0;
-                        fifthNumber = 0;
-                        sixthNumber = 0;
-                        numberCount = 0;
+                        secondNumber = 0;                        
                         numberEntered = 0;
                         numberOfMatches = 0;
-
                         checkForExit = null;
 
                 } //end if else exit option
